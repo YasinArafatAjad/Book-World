@@ -270,18 +270,20 @@ const Header = () => {
           </div>
 
           <div className="flex items-center space-x-4 md:hidden">
-            <Link
-              to="/cart"
-              className={`${isAdmin ? 'hidden' : ''} p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 relative transition-colors duration-200`}
-              aria-label="Shopping Cart"
-            >
-              <ShoppingCart size={20} className="text-gray-700 dark:text-gray-300" />
-              {cart.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                  {cart.length}
-                </span>
-              )}
-            </Link>
+            {currentUser ? (
+              <Link
+                to="/cart"
+                className={`${isAdmin ? 'hidden' : ''} p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 relative transition-colors duration-200`}
+                aria-label="Shopping Cart"
+              >
+                <ShoppingCart size={20} className="text-gray-700 dark:text-gray-300" />
+                {cart.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-primary-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {cart.length}
+                  </span>
+                )}
+              </Link>
+            ) : ('')}
 
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
