@@ -1,11 +1,12 @@
 import axios from 'axios';
+import { getApiUrl } from './api';
 
 export const uploadImage = async (file) => {
   try {
     const formData = new FormData();
     formData.append('image', file);
     
-    const response = await axios.post('http://localhost:7000/api/upload', formData, {
+    const response = await axios.post(getApiUrl('/api/upload'), formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

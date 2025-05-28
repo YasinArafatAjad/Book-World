@@ -1,18 +1,15 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:7000',
-        changeOrigin: true,
-      },
-    },
+  define: {
+    'process.env.VITE_API_URL': JSON.stringify(process.env.NODE_ENV === 'production' 
+      ? 'https://your-render-api-url.onrender.com'
+      : 'http://localhost:7000'
+    ),
   },
 });
