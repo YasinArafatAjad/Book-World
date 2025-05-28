@@ -195,18 +195,18 @@ const AdminUsersPage = () => {
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Role
                     </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    {/* <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Status
-                    </th>
+                    </th> */}
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Joined Date
                     </th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Last Active
                     </th>
-                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    {/* <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Actions
-                    </th>
+                    </th> */}
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -244,7 +244,7 @@ const AdminUsersPage = () => {
                             ))}
                           </select>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        {/* <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                             user.status === 'active'
                               ? 'bg-success-100 text-success-800 dark:bg-success-900 dark:text-success-200'
@@ -252,7 +252,7 @@ const AdminUsersPage = () => {
                           }`}>
                             {user.status === 'active' ? 'Active' : 'Blocked'}
                           </span>
-                        </td>
+                        </td> */}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900 dark:text-white">
                             {new Date(user.createdAt?.toDate()).toLocaleDateString()}
@@ -263,7 +263,7 @@ const AdminUsersPage = () => {
                             {new Date(user.updatedAt?.toDate()).toLocaleDateString()}
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      {/*  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           {user.id !== currentUser.uid && (
                             <div className="flex justify-end space-x-2">
                               <button
@@ -289,7 +289,7 @@ const AdminUsersPage = () => {
                               </button>
                             </div>
                           )}
-                        </td>
+                        </td>  */}
                       </tr>
                     ))
                   ) : (

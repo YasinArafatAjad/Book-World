@@ -293,8 +293,16 @@ export const updateSiteLogo = async (logoUrl) => {
     const settingsRef = doc(db, 'settings', 'site');
     await setDoc(settingsRef, {
       logoUrl,
+      faviconUrl: logoUrl, // Store favicon URL alongside logo
       updatedAt: serverTimestamp()
     }, { merge: true });
+
+    // Update favicon in the DOM
+    const favicon = document.querySelector("link[rel*='icon']");
+    if (favicon) {
+      favicon.href = logoUrl;
+    }
+
     return true;
   } catch (error) {
     console.error('Error updating site logo:', error);
@@ -306,7 +314,22 @@ export const getSiteSettings = async () => {
   try {
     const settingsRef = doc(db, 'settings', 'site');
     const snapshot = await getDoc(settingsRef);
-    return snapshot.exists() ? snapshot.data() : {};
+    
+    if (snapshot.exists()) {
+      const settings = snapshot.data();
+      
+      // Update favicon in the DOM when settings are loaded
+      if (settings.faviconUrl) {
+        const favicon = document.querySelector("link[rel*='icon']");
+        if (favicon) {
+          favicon.href = settings.faviconUrl;
+        }
+      }
+      
+      return settings;
+    }
+    
+    return {};
   } catch (error) {
     console.error('Error getting site settings:', error);
     throw error;
