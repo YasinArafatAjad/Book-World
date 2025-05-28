@@ -125,12 +125,12 @@ const ContactPage = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                {/* <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                   Send us a Message
                 </h2>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <label
                       htmlFor="name"
@@ -204,9 +204,8 @@ const ContactPage = () => {
                   >
                     Send Message
                   </Button>
-                </form>
-              </div>
-
+                </form> 
+              </div>  */}
               {/* FAQ Preview */}
               <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
@@ -218,7 +217,7 @@ const ContactPage = () => {
                       What are your shipping rates?
                     </h4>
                     <p className="mt-1 text-gray-600 dark:text-gray-300">
-                      We offer free shipping on orders over $50. Standard shipping rates apply for orders under $50.
+                      We offer free shipping on orders over ৳1000. Standard shipping rates apply for orders under ৳1000.
                     </p>
                   </div>
                   <div>

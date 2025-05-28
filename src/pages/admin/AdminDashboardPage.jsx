@@ -173,6 +173,17 @@ const AdminDashboardPage = () => {
               </h1>
               <div className="flex gap-4">
                 <Button
+                  to="/admin/books/add"
+                  variant="primary"
+                  icon={<Book size={20} />}
+                >
+                  Add New Book
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex justify-center items-center gap-4 mb-8">
+              <Button
                   variant="secondary"
                   icon={<UserPlus size={20} />}
                   onClick={() => setShowTeamModal(true)}
@@ -186,14 +197,6 @@ const AdminDashboardPage = () => {
                 >
                   Manage Users
                 </Button>
-                <Button
-                  to="/admin/books/add"
-                  variant="primary"
-                  icon={<Book size={20} />}
-                >
-                  Add New Book
-                </Button>
-              </div>
             </div>
 
             {/* Stats Grid */}

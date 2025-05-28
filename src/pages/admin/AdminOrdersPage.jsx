@@ -319,7 +319,7 @@ const AdminOrdersPage = () => {
                       <div>
                         <p className="text-sm text-gray-500 dark:text-gray-400">Total Amount</p>
                         <p className="text-base font-medium text-gray-900 dark:text-white">
-                          ${selectedOrder.total?.toFixed(2)}
+                          ৳{selectedOrder.total?.toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -351,7 +351,7 @@ const AdminOrdersPage = () => {
                       <h4 className="text-base font-medium text-gray-900 dark:text-white mb-2">
                         Order Items
                       </h4>
-                      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg overflow-hidden">
+                      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg overflow-auto">
                         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
                           <thead className="bg-gray-100 dark:bg-gray-600">
                             <tr>
@@ -389,14 +389,14 @@ const AdminOrdersPage = () => {
                                     </div>
                                   </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 dark:text-white">
                                   {item.quantity}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                  ${item.price?.toFixed(2)}
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 dark:text-white">
+                                  ৳{item.price?.toFixed(2)}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                  ${(item.price * item.quantity).toFixed(2)}
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 dark:text-white">
+                                  ৳{(item.price * item.quantity).toFixed(2)}
                                 </td>
                               </tr>
                             ))}
