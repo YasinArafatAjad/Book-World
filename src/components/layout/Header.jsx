@@ -155,7 +155,7 @@ const Header = () => {
         : 'bg-transparent'
         } transition-all ease-linear duration-200`}
     >
-      {/* Desktop  */}
+      
       <div className="container mx-auto px-4 pt-4 pb-2">
         <div className="flex items-center justify-between gap-20 ">
           {/* logo */}
@@ -178,6 +178,7 @@ const Header = () => {
               )}
             </Link>
           </div>
+          {/* Desktop  */}
           {/* Header Item  */}
           <div className="headerItem">
             <nav className="hidden md:flex items-center flex-wrap space-x-4">
