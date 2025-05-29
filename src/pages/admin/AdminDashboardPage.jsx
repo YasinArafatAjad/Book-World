@@ -360,7 +360,7 @@ const AdminDashboardPage = () => {
                           </div>
                           <div className="text-right">
                             <p className="font-medium text-gray-900 dark:text-white">
-                              ${order.total?.toFixed(2)}
+                              ৳{order.total?.toFixed(2)}
                             </p>
                             <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                               order.status === 'completed' ? 'bg-success-100 text-success-800 dark:bg-success-900 dark:text-success-200' :

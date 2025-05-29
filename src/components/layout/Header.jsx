@@ -155,123 +155,78 @@ const Header = () => {
         : 'bg-transparent'
         } transition-all ease-linear duration-200`}
     >
+      {/* Desktop  */}
       <div className="container mx-auto px-4 pt-4 pb-2">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-20 ">
           {/* logo */}
-          <Link to="/" className="flex items-center space-x-2 mb-4">
-            {logoUrl ? (
-              <>
-                <img src={logoUrl} alt="Book World" className="h-20 w-20 object-contain" />
-                <span className="text-xl font-heading font-bold text-black">
-                  Book World
-                </span>
-              </>
-            ) : (
-              <>
-                <Book className="h-8 w-8 text-primary-500" />
-                <span className="text-xl font-heading font-bold text-black">
-                  Book World
-                </span>
-              </>
-            )}
-          </Link>
-
-
-
-          <nav className="hidden md:flex items-center space-x-4">
-            {/* Nav Links */}
-            {[...navLinks, ...userLinks].map((link) => (
-              <NavLink
-                key={link.path}
-                to={link.path}
-                className={({ isActive }) =>
-                  `text-base font-medium transition-colors duration-200 hover:text-primary-600 ${isActive
-                    ? 'text-primary-600 dark:text-primary-400'
-                    : 'text-gray-700 dark:text-gray-300'
-                  }`
-                }
-              >
-                {link.name}
-              </NavLink>
-            ))}
-          </nav>
-
-          <div className="hidden md:flex items-center space-x-4 ml-3">
-            <form
-              onSubmit={handleSearch}
-              className="relative"
-            >
-              <input
-                type="text"
-                placeholder="Search books..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-18 lg:w-40 py-2 px-4 pr-10 rounded-full text-sm border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
-              />
-              <button
-                type="submit"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400"
-                aria-label="Search"
-              >
-                <Search size={18} />
-              </button>
-            </form>
-
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200"
-              aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
-              {isDarkMode ? (
-                <Sun size={20} className="text-amber-400" />
+          <div className="logo">
+            <Link to="/" className="flex items-center space-x-2 mb-4">
+              {logoUrl ? (
+                <>
+                  <img src={logoUrl} alt="Book World" className="h-20 w-20 object-contain" />
+                  <span className="text-xl font-heading font-bold text-black dark:text-white">
+                    Book World
+                  </span>
+                </>
               ) : (
-                <Moon size={20} className="text-gray-700" />
+                <>
+                  <Book className="h-8 w-8 text-primary-500" />
+                  <span className="text-xl font-heading font-bold text-black">
+                    Book World
+                  </span>
+                </>
               )}
-            </button>
-
-            {currentUser ? (<Link
-              to="/cart"
-              className={`${isAdmin ? 'hidden' : ''} p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 relative transition-colors duration-200`}
-              aria-label="Shopping Cart"
-            >
-              <ShoppingCart size={20} className="text-gray-700 dark:text-gray-300" />
-              {cart.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                  {cart.length}
-                </span>
-              )}
-            </Link>) : ('')}
-
-            {currentUser ? (<button
-              onClick={() => {
-                handleLogout();
-                setIsMenuOpen(false);
-              }}
-              className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 w-full"
-            >
-              <LogOut size={20} />
-            </button>) : ('')}
-
-            {currentUser ? (
-              <Link
-                to={isAdmin ? "/admin" : "/dashboard"}
-                className="flex items-center space-x-1 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200"
-              >
-                <User size={20} className="text-gray-700 dark:text-gray-300" />
-              </Link>
-            ) : (
-              <Link
-                to="/login"
-                className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-md hover:bg-primary-700 transition-colors duration-200"
-              >
-                Sign In
-              </Link>
-            )}
+            </Link>
           </div>
-
-          <div className="flex items-center space-x-4 md:hidden">
-            {currentUser ? (
-              <Link
+          {/* Header Item  */}
+          <div className="headerItem">
+            <nav className="hidden md:flex items-center flex-wrap space-x-4">
+              {/* Nav Links */}
+              {[...navLinks, ...userLinks].map((link) => (
+                <NavLink
+                  key={link.path}
+                  to={link.path}
+                  className={({ isActive }) =>
+                    `text-base font-medium transition-colors duration-200 hover:text-primary-600 ${isActive
+                      ? 'text-primary-600 dark:text-primary-400'
+                      : 'text-gray-700 dark:text-gray-300'
+                    }`
+                  }
+                >
+                  {link.name}
+                </NavLink>
+              ))}
+              <form
+                onSubmit={handleSearch}
+                className="relative"
+              >
+                <input
+                  type="text"
+                  placeholder="Search books..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-40 py-2 px-4 pr-10 rounded-full text-sm border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400"
+                  aria-label="Search"
+                >
+                  <Search size={18} />
+                </button>
+              </form>
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200"
+                aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {isDarkMode ? (
+                  <Sun size={20} className="text-amber-400" />
+                ) : (
+                  <Moon size={20} className="text-gray-700" />
+                )}
+              </button>
+              {currentUser ? (<Link
                 to="/cart"
                 className={`${isAdmin ? 'hidden' : ''} p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 relative transition-colors duration-200`}
                 aria-label="Shopping Cart"
@@ -282,42 +237,74 @@ const Header = () => {
                     {cart.length}
                   </span>
                 )}
-              </Link>
-            ) : ('')}
+              </Link>) : ('')}
+              {currentUser ? (<Link
+                onClick={() => {
+                  handleLogout();
+                  setIsMenuOpen(false);
+                }}
+                className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 relative transition-colors duration-200`}
+                aria-label="Shopping Cart"
+              >
+                <LogOut size={20} className="text-gray-700 dark:text-gray-300" />                
+              </Link>) : ('')}
+            </nav>
 
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200"
-              aria-label={isMenuOpen ? 'Close Menu' : 'Open Menu'}
-            >
-              <AnimatePresence mode="wait">
-                {isMenuOpen ? (
-                  <motion.div
-                    key="close"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <X size={24} className="text-gray-700 dark:text-gray-300" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Menu size={24} className="text-gray-700 dark:text-gray-300" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </button>
+            <div className="hidden md:flex items-center space-x-4 ml-3">
+
+            </div>
+
+            <div className="flex items-center space-x-4 md:hidden">
+              {currentUser ? (
+                <Link
+                  to="/cart"
+                  className={`${isAdmin ? 'hidden' : ''} p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 relative transition-colors duration-200`}
+                  aria-label="Shopping Cart"
+                >
+                  <ShoppingCart size={20} className="text-gray-700 dark:text-gray-300" />
+                  {cart.length > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-primary-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                      {cart.length}
+                    </span>
+                  )}
+                </Link>
+              ) : ('')}
+
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200"
+                aria-label={isMenuOpen ? 'Close Menu' : 'Open Menu'}
+              >
+                <AnimatePresence mode="wait">
+                  {isMenuOpen ? (
+                    <motion.div
+                      key="close"
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <X size={24} className="text-gray-700 dark:text-gray-300" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="menu"
+                      initial={{ rotate: 90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Menu size={24} className="text-gray-700 dark:text-gray-300" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
+      {/* Mobile menu */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -328,6 +315,7 @@ const Header = () => {
             className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-lg overflow-y-auto max-h-[calc(100vh-4rem)]"
           >
             <div className="container mx-auto px-4 py-4">
+              {/* search bar */}
               <motion.form
                 variants={menuItemVariants}
                 onSubmit={handleSearch}
@@ -421,7 +409,7 @@ const Header = () => {
                   </div>
                 )}
               </motion.div>
-
+              {/* darkmode toggle */}
               <motion.div
                 variants={menuItemVariants}
                 className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700"
@@ -431,7 +419,7 @@ const Header = () => {
                     toggleTheme();
                     setIsMenuOpen(false);
                   }}
-                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 w-full"
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 w-full mb-44"
                 >
                   {isDarkMode ? (
                     <>
