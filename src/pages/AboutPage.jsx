@@ -135,7 +135,7 @@ const AboutPage = () => {
               <p className="text-gray-600 dark:text-gray-300">Happy Customers</p>
             </motion.div>
 
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
@@ -146,9 +146,9 @@ const AboutPage = () => {
               </div>
               <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">50+</h3>
               <p className="text-gray-600 dark:text-gray-300">Countries Served</p>
-            </motion.div>
+            </motion.div> */}
 
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
@@ -159,7 +159,7 @@ const AboutPage = () => {
               </div>
               <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">25+</h3>
               <p className="text-gray-600 dark:text-gray-300">Industry Awards</p>
-            </motion.div>
+            </motion.div> */}
           </div>
         </div>
       </section>

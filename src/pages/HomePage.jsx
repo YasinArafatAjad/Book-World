@@ -22,29 +22,29 @@ const HomePage = () => {
           where('featured', '==', true),
           limit(4)
         );
-        
+
         // Fetch new releases
         const newReleasesQuery = query(
           collection(db, 'books'),
           orderBy('createdAt', 'desc'),
           limit(4)
         );
-        
+
         const [featuredSnapshot, newReleasesSnapshot] = await Promise.all([
           getDocs(featuredQuery),
           getDocs(newReleasesQuery)
         ]);
-        
+
         const featuredData = featuredSnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         }));
-        
+
         const newReleasesData = newReleasesSnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         }));
-        
+
         setFeaturedBooks(featuredData);
         setNewReleases(newReleasesData);
       } catch (error) {
@@ -88,13 +88,13 @@ const HomePage = () => {
       <section className="relative h-[80vh] flex items-center">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 to-gray-900/60 z-10" />
-          <img 
-            src="https://images.pexels.com/photos/1106468/pexels-photo-1106468.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-            alt="Library shelves filled with books" 
+          <img
+            src="https://images.pexels.com/photos/1106468/pexels-photo-1106468.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            alt="Library shelves filled with books"
             className="w-full h-full object-cover"
           />
         </div>
-        
+
         <div className="container mx-auto px-4 relative z-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -111,17 +111,17 @@ const HomePage = () => {
               Start your reading journey with us today.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button 
-                to="/books" 
-                size="lg" 
+              <Button
+                to="/books"
+                size="lg"
                 variant="primary"
                 icon={<BookOpen size={20} />}
               >
                 Explore Books
               </Button>
-              <Button 
-                to="/about" 
-                size="lg" 
+              <Button
+                to="/about"
+                size="lg"
                 variant="outline"
                 className="border-white text-white hover:bg-white/10"
               >
@@ -137,7 +137,7 @@ const HomePage = () => {
         <section className="py-16 bg-gray-50 dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-10">
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
@@ -150,8 +150,8 @@ const HomePage = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <Link 
-                  to="/books" 
+                <Link
+                  to="/books"
                   className="flex items-center text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
                 >
                   View All
@@ -159,8 +159,8 @@ const HomePage = () => {
                 </Link>
               </motion.div>
             </div>
-            
-            <motion.div 
+
+            <motion.div
               variants={containerVariants}
               initial="hidden"
               animate="visible"
@@ -175,11 +175,54 @@ const HomePage = () => {
           </div>
         </section>
       )}
+   {/* New Releases Section */}
+      {newReleases.length > 0 && (
+        <section className="py-16 bg-gray-50 dark:bg-gray-800">
+          <div className="container mx-auto px-4">
+            <div className="flex justify-between items-center mb-10">
+              <motion.h2
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-3xl font-heading font-bold text-gray-900 dark:text-white"
+              >
+                New Releases
+              </motion.h2>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Link
+                  to="/books"
+                  className="flex items-center text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
+                >
+                  View All
+                  <ArrowRight size={16} className="ml-1" />
+                </Link>
+              </motion.div>
+            </div>
+
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            >
+              {newReleases.map(book => (
+                <motion.div key={book.id} variants={itemVariants}>
+                  <BookCard book={book} />
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       {/* Features Section */}
       <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -187,9 +230,9 @@ const HomePage = () => {
           >
             Why Choose Book World
           </motion.h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
@@ -203,8 +246,8 @@ const HomePage = () => {
                 Handpicked books from various genres to ensure quality and diversity in your reading.
               </p>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -218,8 +261,8 @@ const HomePage = () => {
                 Get personalized book recommendations from our team of literary experts.
               </p>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
@@ -237,55 +280,11 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* New Releases Section */}
-      {newReleases.length > 0 && (
-        <section className="py-16 bg-gray-50 dark:bg-gray-800">
-          <div className="container mx-auto px-4">
-            <div className="flex justify-between items-center mb-10">
-              <motion.h2 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-                className="text-3xl font-heading font-bold text-gray-900 dark:text-white"
-              >
-                New Releases
-              </motion.h2>
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <Link 
-                  to="/books" 
-                  className="flex items-center text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
-                >
-                  View All
-                  <ArrowRight size={16} className="ml-1" />
-                </Link>
-              </motion.div>
-            </div>
-            
-            <motion.div 
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-            >
-              {newReleases.map(book => (
-                <motion.div key={book.id} variants={itemVariants}>
-                  <BookCard book={book} />
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-      )}
-
       {/* Newsletter Section */}
       <section className="py-16 bg-primary-700 dark:bg-primary-900">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -293,7 +292,7 @@ const HomePage = () => {
             >
               Stay Updated with Book World
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
@@ -301,7 +300,7 @@ const HomePage = () => {
             >
               Subscribe to our newsletter for new releases, reading recommendations, and exclusive offers.
             </motion.p>
-            <motion.form 
+            <motion.form
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
