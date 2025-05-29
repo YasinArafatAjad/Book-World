@@ -108,7 +108,7 @@ const AboutPage = () => {
       {/* Stats Section */}
       <section className="py-16 bg-white dark:bg-gray-800">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="flex flex-wrap gap-24 justify-center items-center ">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
