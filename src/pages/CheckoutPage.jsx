@@ -7,13 +7,14 @@ import { useAuth } from '../contexts/AuthContext';
 import { createOrder } from '../utils/firebase';
 import { calculateCartTotals } from '../utils/cartCalculations';
 import Button from '../components/ui/Button';
-import { toast } from 'react-toastify';
+import { useNotification } from '../components/ui/Notification';
 
 const CheckoutPage = () => {
   const { cart, cartTotal, clearCart } = useCart();
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { showNotification } = useNotification();
 
   const { courierCharge, codFee, total } = calculateCartTotals(cartTotal);
 
@@ -65,11 +66,15 @@ const CheckoutPage = () => {
 
       await createOrder(currentUser.uid, orderData);
       clearCart();
-      toast.success('Order placed successfully!');
+      showNotification('Order placed successfully!', 'success');
       navigate('/orders');
     } catch (error) {
       console.error('Checkout error:', error);
-      toast.error('Failed to place order. Please try again.');
+      if (error.message === 'DUPLICATE_ORDER') {
+        showNotification('Similar order detected within the last hour. Please change order before placing or wait for 1 hour.', 'warning');
+      } else {
+        showNotification('Failed to place order. Please try again.', 'error');
+      }
     } finally {
       setLoading(false);
     }
