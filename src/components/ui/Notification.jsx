@@ -6,11 +6,11 @@ import { CheckCircle, AlertCircle, XCircle, Info, X } from 'lucide-react';
 const notificationTypes = {
   success: {
     icon: CheckCircle,
-    className: 'bg-success-50 dark:bg-success-900/30 text-success-700 dark:text-success-300 border-success-200 dark:border-success-800',
+    className: 'bg-success-50 dark:bg-success-900 text-success-700 dark:text-success-300 border-success-200 dark:border-success-800',
   },
   error: {
     icon: XCircle,
-    className: 'bg-error-50 dark:bg-error-900/30 text-error-700 dark:text-error-300 border-error-200 dark:border-error-800',
+    className: 'bg-error-50 dark:bg-error-900 text-error-700 dark:text-error-300 border-error-200 dark:border-error-800',
   },
   warning: {
     icon: AlertCircle,
@@ -18,7 +18,7 @@ const notificationTypes = {
   },
   info: {
     icon: Info,
-    className: 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border-primary-200 dark:border-primary-800',
+    className: 'bg-primary-50 dark:bg-primary-900 text-primary-700 dark:text-primary-300 border-primary-200 dark:border-primary-800',
   },
 };
 
