@@ -14,7 +14,7 @@ const notificationTypes = {
   },
   warning: {
     icon: AlertCircle,
-    className: 'bg-warning-50 dark:bg-warning-900/30 text-warning-700 dark:text-warning-300 border-warning-200 dark:border-warning-800',
+    className: 'bg-warning-50 dark:bg-warning-900 text-warning-700 dark:text-warning-300 border-warning-200 dark:border-warning-800',
   },
   info: {
     icon: Info,
