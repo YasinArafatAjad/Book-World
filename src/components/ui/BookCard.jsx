@@ -17,6 +17,8 @@ const BookCard = ({ book }) => {
     e.preventDefault();
     e.stopPropagation();
     addItem(book);
+    navigate('/checkout')
+    
     toast.success('Added to cart');
      if (!currentUser) {
       console.log('Please sign in to add to cart');
