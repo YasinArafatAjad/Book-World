@@ -71,7 +71,7 @@ const CheckoutPage = () => {
     } catch (error) {
       console.error('Checkout error:', error);
       if (error.message === 'DUPLICATE_ORDER') {
-        showNotification('Similar order detected within the last hour. Please wait before placing identical orders.', 'warning');
+        showNotification('Similar order detected within the last hour. Please change order before placing or wait for 1 hour.', 'warning');
       } else {
         showNotification('Failed to place order. Please try again.', 'error');
       }
