@@ -17,7 +17,7 @@ const BookCard = ({ book }) => {
     e.preventDefault();
     e.stopPropagation();
     addItem(book);
-    navigate('/checkout')
+    navigate('/cart')
     
     toast.success('Added to cart');
      if (!currentUser) {
