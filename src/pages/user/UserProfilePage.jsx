@@ -9,7 +9,7 @@ import { uploadImage } from '../../utils/cloudinary';
 import { updateSiteLogo } from '../../utils/firebase';
 
 const UserProfilePage = () => {
-  const { currentUser, updateUserProfile, deleteAccount, changePassword, isAdmin } = useAuth();
+  const { currentUser, updateUserProfile, deleteAccount, changePassword, isAdmin, isDeveloper } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -246,7 +246,7 @@ const UserProfilePage = () => {
                 </div>
 
                 {/* Logo Change Section (Admin Only) */}
-                {isAdmin && (
+                {isAdmin || isDeveloper && (
                   <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
                     <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                       <Image className="mr-2" size={20} />

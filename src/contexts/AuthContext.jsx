@@ -188,6 +188,8 @@ export function AuthProvider({ children }) {
     userRole,
     userStatus,
     isAdmin: userRole === 'admin',
+    isModerator: userRole === 'moderator',
+    isDeveloper: userRole === 'developer',
     loading,
     signup,
     login,

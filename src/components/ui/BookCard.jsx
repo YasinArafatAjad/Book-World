@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ShoppingCart, Heart } from 'lucide-react';
 import Button from './Button';
@@ -11,20 +11,27 @@ const BookCard = ({ book }) => {
   const { addItem } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
 
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
     addItem(book);
     toast.success('Added to cart');
+     if (!currentUser) {
+      console.log('Please sign in to add to cart');
+      navigate('/login')
+      return;
+    }
   };
-
+  
   const handleToggleFavorite = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     
     if (!currentUser) {
-      toast.error('Please sign in to add favorites');
+      console.log('Please sign in to add favorites');
+      navigate('/login')
       return;
     }
 

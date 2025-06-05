@@ -62,35 +62,9 @@ const UserDashboardPage = () => {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              {/* Quick Actions */}
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    Quick Actions
-                  </h2>
-                  <User className="text-primary-600 dark:text-primary-400" size={24} />
-                </div>
-                <div className="space-y-3">
-                  <Button
-                    to="/profile"
-                    variant="outline"
-                    fullWidth
-                  >
-                    Edit Profile
-                  </Button>
-                  <Button
-                    to="/orders"
-                    variant="outline"
-                    fullWidth
-                  >
-                    View Orders
-                  </Button>
-                </div>
-              </div>
-
+            <div className="flex flex-col md:flex-row justify-center items-center gap-6 mb-8">
               {/* Account Overview */}
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+              <div className="bg-white dark:bg-gray-800 px-20 py-12 rounded-lg shadow-sm">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                     Account Overview
@@ -113,8 +87,8 @@ const UserDashboardPage = () => {
               </div>
 
               {/* Order Summary */}
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
-                <div className="flex items-center justify-between mb-4">
+              <div className="bg-white dark:bg-gray-800 px-[5.6rem] lg:px-20 py-12 pb-16 rounded-lg shadow-sm">
+                <div className="flex items-center justify-between gap-1 mb-4">
                   <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                     Order Summary
                   </h2>
@@ -162,11 +136,10 @@ const UserDashboardPage = () => {
                             {new Date(order.createdAt?.toDate()).toLocaleDateString()}
                           </p>
                         </div>
-                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                          order.status === 'completed' ? 'bg-success-100 text-success-800 dark:bg-success-900 dark:text-success-200' :
-                          order.status === 'pending' ? 'bg-warning-100 text-warning-800 dark:bg-warning-900 dark:text-warning-200' :
-                          'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
-                        }`}>
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${order.status === 'completed' ? 'bg-success-100 text-success-800 dark:bg-success-900 dark:text-success-200' :
+                            order.status === 'pending' ? 'bg-warning-100 text-warning-800 dark:bg-warning-900 dark:text-warning-200' :
+                              'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
+                          }`}>
                           {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                         </span>
                       </div>

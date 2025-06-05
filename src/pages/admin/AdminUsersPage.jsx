@@ -26,6 +26,10 @@ const ROLES = {
     label: 'Moderator',
     color: 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200'
   },
+  developer: {
+    label: 'Developer',
+    color: 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200'
+  },
   user: {
     label: 'User',
     color: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'

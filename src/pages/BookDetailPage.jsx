@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ShoppingCart, ArrowLeft, Heart } from 'lucide-react';
 import { toast } from 'react-toastify';
@@ -8,6 +8,8 @@ import { useCart } from '../contexts/CartContext';
 import Button from '../components/ui/Button';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import AnimatedDescription from '../components/ui/AnimatedDescription';
+import { useAuth } from '../contexts/AuthContext';
+import { useFavorites } from '../contexts/FavoritesContext';
 
 const BookDetailPage = () => {
   const { id } = useParams();
@@ -15,6 +17,9 @@ const BookDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const { addItem } = useCart();
+  const navigate = useNavigate();
+  const { currentUser } = useAuth();
+  const { toggleFavorite, isFavorite } = useFavorites();
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -35,6 +40,30 @@ const BookDetailPage = () => {
   const handleAddToCart = () => {
     addItem(book, quantity);
     toast.success('Book added to cart');
+
+    if (!currentUser) {
+      console.log('Please sign in to add to cart');
+      navigate('/login')
+      return;
+    }
+  };
+
+  const handleToggleFavorite = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!currentUser) {
+      console.log('Please sign in to add favorites');
+      navigate('/login')
+      return;
+    }
+
+    const success = await toggleFavorite(book);
+    if (success) {
+      toast.success(isFavorite(book.id) ? 'Removed from favorites' : 'Added to favorites');
+    } else {
+      toast.error('Failed to update favorites');
+    }
   };
 
   if (loading) {
@@ -84,12 +113,15 @@ const BookDetailPage = () => {
                 alt={book.title}
                 className="w-full h-[500px] object-cover rounded-lg"
               />
-              <button
-                className="absolute top-4 right-4 p-2 bg-white dark:bg-gray-700 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
-                aria-label="Add to favorites"
+              <motion.button
+                className={`absolute top-3 right-3 p-2 bg-white dark:bg-gray-800 rounded-full shadow-md ${isFavorite(book.id) ? 'text-red-500' : 'text-gray-500 hover:text-red-500'
+                  } transition-colors duration-200`}
+                whileTap={{ scale: 0.9 }}
+                onClick={handleToggleFavorite}
+                aria-label={isFavorite(book.id) ? 'Remove from favorites' : 'Add to favorites'}
               >
-                <Heart size={20} className="text-gray-600 dark:text-gray-300" />
-              </button>
+                <Heart size={18} fill={isFavorite(book.id) ? 'currentColor' : 'none'} />
+              </motion.button>
             </motion.div>
 
             {/* Book Details */}

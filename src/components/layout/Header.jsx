@@ -29,7 +29,7 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [logoUrl, setLogoUrl] = useState('');
-  const { currentUser, logout, isAdmin } = useAuth();
+  const { currentUser, logout, isAdmin, isDeveloper, isModerator } = useAuth();
   const { cart } = useCart();
   const { toggleTheme, isDarkMode } = useTheme();
   const navigate = useNavigate();
@@ -105,15 +105,15 @@ const Header = () => {
 
   const navLinks = [
     { name: 'Home', path: '/', icon: <Home size={20} /> },
-    { name: 'Books', path: isAdmin ? '/admin/books' : '/books', icon: <BookOpen size={20} /> },
+    { name: 'Books', path: isAdmin || isDeveloper || isModerator ? '/admin/books' : '/books', icon: <BookOpen size={20} /> },
     { name: 'About', path: '/about', icon: <Info size={20} /> },
     { name: 'Contact', path: '/contact', icon: <Mail size={20} /> },
   ];
 
   const userLinks = [
     { name: 'Profile', path: '/profile', icon: <User size={20} /> },
-    { name: 'Dashboard', path: isAdmin ? "/admin" : "/dashboard", icon: <LayoutDashboard /> },
-    { name: 'Orders', path: isAdmin ? '/admin/orders' : '/orders', icon: <ShoppingBag size={20} /> },
+    { name: 'Dashboard', path: isAdmin || isDeveloper || isModerator ? "/admin" : "/dashboard", icon: <LayoutDashboard /> },
+    { name: 'Orders', path: isAdmin || isDeveloper || isModerator ? '/admin/orders' : '/orders', icon: <ShoppingBag size={20} /> },
     { name: 'Favorites', path: '/favorites', icon: <Heart size={20} /> },
   ];
 
@@ -155,7 +155,7 @@ const Header = () => {
         : 'bg-transparent'
         } transition-all ease-linear duration-200`}
     >
-      
+
       <div className="container mx-auto px-4 pt-4 pb-2">
         <div className="flex items-center justify-between gap-20 ">
           {/* logo */}
@@ -181,7 +181,7 @@ const Header = () => {
           {/* Desktop  */}
           {/* Header Item  */}
           <div className="headerItem">
-            <nav className="hidden md:flex items-center flex-wrap space-x-4">
+            <nav className="hidden md:flex items-center justify-end flex-wrap gap-4">
               {/* Nav Links */}
               {[...navLinks, ...userLinks].map((link) => (
                 <NavLink
@@ -227,9 +227,9 @@ const Header = () => {
                   <Moon size={20} className="text-gray-700" />
                 )}
               </button>
-              {currentUser ? (<Link
+              {currentUser && (<Link
                 to="/cart"
-                className={`${isAdmin ? 'hidden' : ''} p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 relative transition-colors duration-200`}
+                className={`${isAdmin || isDeveloper || isModerator ? 'hidden' : ''} p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 relative transition-colors duration-200`}
                 aria-label="Shopping Cart"
               >
                 <ShoppingCart size={20} className="text-gray-700 dark:text-gray-300" />
@@ -238,28 +238,42 @@ const Header = () => {
                     {cart.length}
                   </span>
                 )}
-              </Link>) : ('')}
-              {currentUser ? (<Link
-                onClick={() => {
-                  handleLogout();
-                  setIsMenuOpen(false);
-                }}
-                className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 relative transition-colors duration-200`}
-                aria-label="Shopping Cart"
-              >
-                <LogOut size={20} className="text-gray-700 dark:text-gray-300" />                
-              </Link>) : ('')}
-            </nav>
-
-            <div className="hidden md:flex items-center space-x-4 ml-3">
-
-            </div>
-
-            <div className="flex items-center space-x-4 md:hidden">
+              </Link>)}
               {currentUser ? (
                 <Link
+                  onClick={() => {
+                    handleLogout();
+                    setIsMenuOpen(false);
+                  }}
+                  className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 relative transition-colors duration-200`}
+                  aria-label="Shopping Cart"
+                >
+                  <LogOut size={20} className="text-gray-700 dark:text-gray-300" />
+                </Link>
+              ) : (
+                <div className="flex gap-4">
+                  <Link
+                    to="/login"
+                    className="flex items-center justify-center px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="flex items-center justify-center px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Create Account
+                  </Link>
+                </div>
+              )}
+            </nav>
+            <div className="flex items-center space-x-4 md:hidden">
+              {currentUser && (
+                <Link
                   to="/cart"
-                  className={`${isAdmin ? 'hidden' : ''} p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 relative transition-colors duration-200`}
+                  className={`${isAdmin || isDeveloper || isModerator ? 'hidden' : ''} p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 relative transition-colors duration-200`}
                   aria-label="Shopping Cart"
                 >
                   <ShoppingCart size={20} className="text-gray-700 dark:text-gray-300" />
@@ -269,7 +283,7 @@ const Header = () => {
                     </span>
                   )}
                 </Link>
-              ) : ('')}
+              )}
 
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}

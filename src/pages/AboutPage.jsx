@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/ui/Button';
 
 const AboutPage = () => {
-  const { currentUser, isAdmin } = useAuth();
+  const { currentUser, isAdmin, isDeveloper } = useAuth();
   const [teamMembers, setTeamMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -215,7 +215,7 @@ const AboutPage = () => {
                     </p>
                   )}
                 </div>
-                {isAdmin && (
+                {isAdmin || isDeveloper && (
                   <button
                     onClick={() => handleDeleteClick(member)}
                     className="absolute top-2 right-2 p-2 bg-white dark:bg-gray-800 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-50 dark:hover:bg-red-900/30"

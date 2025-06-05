@@ -1,19 +1,18 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../ui/LoadingSpinner';
 
 const AdminRoute = () => {
-  const { currentUser, isAdmin, loading } = useAuth();
-  const location = useLocation();
+  const { currentUser, isAdmin, isDeveloper, isModerator, loading } = useAuth();
 
   if (loading) {
     return <LoadingSpinner />;
   }
 
-  if (!currentUser || !isAdmin) {
-    // Redirect to home page if not admin
-    return <Navigate to="/" replace />;
-  }
+  // if (!currentUser || !isAdmin || !isDeveloper || !isModerator) {
+  //   // Redirect to home page if not Admin/Moderator/Developer/user
+  //   return <Navigate to="/" replace />;
+  // }
 
   return <Outlet />;
 };

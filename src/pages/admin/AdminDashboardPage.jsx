@@ -138,7 +138,7 @@ const AdminDashboardPage = () => {
   }, []);
 
   const renderActiveShape = (props) => {
-    const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent } = props;
+    const { cx, cy, innerradius, outerradius, startAngle, endAngle, fill, payload, percent } = props;
 
     return (
       <g>
@@ -152,7 +152,7 @@ const AdminDashboardPage = () => {
           d={`M${cx},${cy}L${cx},${cy}`}
           fill="none"
           stroke={fill}
-          {...{ innerRadius, outerRadius, startAngle, endAngle }}
+          {...{ innerradius, outerradius, startAngle, endAngle }}
         />
       </g>
     );
@@ -264,8 +264,8 @@ const AdminDashboardPage = () => {
                         data={categoryStats}
                         cx="50%"
                         cy="50%"
-                        innerRadius={60}
-                        outerRadius={80}
+                        innerradius={60}
+                        outerradius={80}
                         fill="#8884d8"
                         paddingAngle={5}
                         dataKey="value"
