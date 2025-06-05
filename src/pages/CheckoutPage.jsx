@@ -69,7 +69,11 @@ const CheckoutPage = () => {
       navigate('/orders');
     } catch (error) {
       console.error('Checkout error:', error);
-      toast.error('Failed to place order. Please try again.');
+      if (error.message === 'DUPLICATE_ORDER') {
+        toast.error('Similar order detected within the last hour. Please wait before placing identical orders.');
+      } else {
+        toast.error('Failed to place order. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

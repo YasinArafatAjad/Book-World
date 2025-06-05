@@ -12,7 +12,8 @@ import {
   deleteDoc,
   serverTimestamp,
   runTransaction,
-  setDoc
+  setDoc,
+  Timestamp
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
@@ -127,9 +128,57 @@ export const deleteBook = async (id) => {
   }
 };
 
+// Check for duplicate orders within the last hour
+const checkDuplicateOrder = async (userId, items) => {
+  try {
+    // Get timestamp for 1 hour ago
+    const oneHourAgo = new Date();
+    oneHourAgo.setHours(oneHourAgo.getHours() - 1);
+    
+    // Query recent orders
+    const ordersQuery = query(
+      collection(db, 'orders'),
+      where('userId', '==', userId),
+      where('createdAt', '>', Timestamp.fromDate(oneHourAgo)),
+      orderBy('createdAt', 'desc')
+    );
+    
+    const snapshot = await getDocs(ordersQuery);
+    
+    // Check each recent order for matching items
+    for (const doc of snapshot.docs) {
+      const order = doc.data();
+      
+      // Check if items match (same books and quantities)
+      const itemsMatch = items.every(newItem => {
+        const matchingItem = order.items.find(existingItem => 
+          existingItem.id === newItem.id && 
+          existingItem.quantity === newItem.quantity
+        );
+        return matchingItem !== undefined;
+      }) && order.items.length === items.length;
+      
+      if (itemsMatch) {
+        return true; // Duplicate order found
+      }
+    }
+    
+    return false; // No duplicate found
+  } catch (error) {
+    console.error('Error checking for duplicate orders:', error);
+    throw error;
+  }
+};
+
 // Orders
 export const createOrder = async (userId, orderData) => {
   try {
+    // Check for duplicate orders
+    const isDuplicate = await checkDuplicateOrder(userId, orderData.items);
+    if (isDuplicate) {
+      throw new Error('DUPLICATE_ORDER');
+    }
+
     return await runTransaction(db, async (transaction) => {
       // First, read all book documents and verify stock
       const bookRefs = orderData.items.map(item => doc(db, 'books', item.id));
