@@ -40,6 +40,7 @@ const BookDetailPage = () => {
   const handleAddToCart = () => {
     addItem(book, quantity);
     toast.success('Book added to cart');
+    navigate('/cart')
 
     if (!currentUser) {
       console.log('Please sign in to add to cart');
