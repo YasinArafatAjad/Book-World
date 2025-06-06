@@ -9,10 +9,10 @@ const AdminRoute = () => {
     return <LoadingSpinner />;
   }
 
-  // if (!currentUser || !isAdmin || !isDeveloper || !isModerator) {
-  //   // Redirect to home page if not Admin/Moderator/Developer/user
-  //   return <Navigate to="/" replace />;
-  // }
+  if (!currentUser || (!isAdmin && !isDeveloper && !isModerator)) {
+    // Redirect to home page if not authenticated or not Admin/Moderator/Developer
+    return <Navigate to="/" replace />;
+  }
 
   return <Outlet />;
 };
