@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Book, Facebook, Twitter, Instagram, Mail } from 'lucide-react';
+import { toast } from 'react-toastify';
 import { getSiteSettings } from '../../utils/firebase';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [logoUrl, setLogoUrl] = useState('');
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -20,6 +23,37 @@ const Footer = () => {
     };
     fetchSettings();
   }, []);
+
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!email.trim()) {
+      toast.error('Please enter your email address');
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+
+    setLoading(true);
+    
+    try {
+      // Simulate newsletter subscription (replace with actual API call)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast.success('Thank you for subscribing to our newsletter!');
+      setEmail(''); // Clear the email field
+    } catch (error) {
+      console.error('Newsletter subscription error:', error);
+      toast.error('Failed to subscribe. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <footer className="bg-gray-900 text-gray-300">
@@ -109,20 +143,33 @@ const Footer = () => {
             <p className="text-sm mb-4">
               Stay updated with new releases, exclusive offers, and literary events.
             </p>
-            <form className="mt-4">
+            <form className="mt-4" onSubmit={handleNewsletterSubmit}>
               <div className="flex flex-col space-y-2">
                 <input
                   type="email"
                   placeholder="Your email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="px-4 py-2 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 text-white text-sm"
                   required
+                  disabled={loading}
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-primary-600 hover:bg-primary-700 transition-colors duration-200 rounded-md text-white text-sm font-medium flex items-center justify-center"
+                  disabled={loading}
+                  className="px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 disabled:cursor-not-allowed transition-colors duration-200 rounded-md text-white text-sm font-medium flex items-center justify-center"
                 >
-                  <Mail size={16} className="mr-2" />
-                  Subscribe
+                  {loading ? (
+                    <div className="flex items-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Subscribing...
+                    </div>
+                  ) : (
+                    <>
+                      <Mail size={16} className="mr-2" />
+                      Subscribe
+                    </>
+                  )}
                 </button>
               </div>
             </form>
