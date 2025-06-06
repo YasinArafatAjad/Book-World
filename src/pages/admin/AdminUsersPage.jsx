@@ -22,22 +22,26 @@ const ROLES = {
   admin: {
     label: 'Admin',
     color: 'bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200',
-    canAssign: ['developer', 'moderator', 'user'] // Admin can assign moderator and user roles
+    canAssign: ['developer', 'moderator', 'user'], // Admin can assign moderator and user roles
+    isSenior: true
   },
   moderator: {
     label: 'Moderator',
     color: 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200',
-    canAssign: ['moderator', 'user'] // Moderator can only assign user role
+    canAssign: ['moderator', 'user'], // Moderator can only assign user role
+    isSenior: true
   },
   developer: {
     label: 'Developer',
     color: 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200',
-    canAssign: ['developer', 'moderator', 'user'] // Developer can assign all roles
+    canAssign: ['developer', 'moderator', 'user'], // Developer can assign all roles
+    isSenior: true
   },
   user: {
     label: 'User',
     color: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
-    canAssign: [] // User cannot assign any roles
+    canAssign: [], // User cannot assign any roles
+    isSenior: false
   }
 };
 
@@ -99,11 +103,48 @@ const AdminUsersPage = () => {
     // Users cannot change their own role
     if (targetUser.id === currentUser.uid) return false;
     
-    // Get available roles for current user
-    const availableRoles = getAvailableRoles();
+    // Check if target user has a senior role and current user doesn't have sufficient permissions
+    const targetRole = ROLES[targetUser.role];
+    const currentRole = ROLES[userRole];
     
-    // Check if current user can assign any role different from target user's current role
+    // If target user has a senior role, only allow changes if:
+    // 1. Current user is developer (can manage all)
+    // 2. Current user is admin and target is not developer
+    // 3. Target user is not a senior role
+    if (targetRole?.isSenior) {
+      if (userRole === 'developer') {
+        // Developer can manage all roles
+        return true;
+      } else if (userRole === 'admin' && targetUser.role !== 'developer') {
+        // Admin can manage moderator and user roles, but not developer
+        return true;
+      } else {
+        // Moderator or lower cannot manage senior roles
+        return false;
+      }
+    }
+    
+    // For non-senior roles, check if current user has available roles to assign
+    const availableRoles = getAvailableRoles();
     return availableRoles.some(role => role !== targetUser.role);
+  };
+
+  // Function to get the reason why role cannot be changed
+  const getRoleChangeReason = (targetUser) => {
+    if (targetUser.id === currentUser.uid) {
+      return 'Own role';
+    }
+    
+    const targetRole = ROLES[targetUser.role];
+    if (targetRole?.isSenior) {
+      if (userRole === 'moderator') {
+        return 'Senior role';
+      } else if (userRole === 'admin' && targetUser.role === 'developer') {
+        return 'Developer role';
+      }
+    }
+    
+    return 'No permission';
   };
 
   const handleRoleChange = async (userId, newRole) => {
@@ -296,17 +337,10 @@ const AdminUsersPage = () => {
                               <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${ROLES[user.role]?.color || ROLES.user.color}`}>
                                 {ROLES[user.role]?.label || 'User'}
                               </span>
-                              {user.id === currentUser.uid ? (
-                                <span className="ml-2 text-xs text-gray-500 dark:text-gray-400 flex items-center">
-                                  <Lock size={12} className="mr-1" />
-                                  Own role
-                                </span>
-                              ) : (
-                                <span className="ml-2 text-xs text-gray-500 dark:text-gray-400 flex items-center">
-                                  <Lock size={12} className="mr-1" />
-                                  No permission
-                                </span>
-                              )}
+                              <span className="ml-2 text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                                <Lock size={12} className="mr-1" />
+                                {getRoleChangeReason(user)}
+                              </span>
                             </div>
                           )}
                         </td>
