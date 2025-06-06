@@ -9,7 +9,8 @@ import {
   ChevronRight,
   AlertTriangle,
   Ban,
-  Trash2
+  Trash2,
+  Lock
 } from 'lucide-react';
 import { collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebase/config';
@@ -91,6 +92,18 @@ const AdminUsersPage = () => {
     // Check if the target user's current role is something the current user can manage
     // or if there are roles the current user can assign
     return availableRoles.length > 0;
+  };
+
+  // Function to check if current user has permission to manage a specific user's role
+  const hasRolePermission = (targetUser) => {
+    // Users cannot change their own role
+    if (targetUser.id === currentUser.uid) return false;
+    
+    // Get available roles for current user
+    const availableRoles = getAvailableRoles();
+    
+    // Check if current user can assign any role different from target user's current role
+    return availableRoles.some(role => role !== targetUser.role);
   };
 
   const handleRoleChange = async (userId, newRole) => {
@@ -245,6 +258,11 @@ const AdminUsersPage = () => {
                             <div className="ml-4">
                               <div className="text-sm font-medium text-gray-900 dark:text-white">
                                 {user.name}
+                                {user.id === currentUser.uid && (
+                                  <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                    You
+                                  </span>
+                                )}
                               </div>
                               <div className="text-sm text-gray-500 dark:text-gray-400">
                                 {user.email}
@@ -253,7 +271,7 @@ const AdminUsersPage = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          {canChangeUserRole(user) ? (
+                          {hasRolePermission(user) ? (
                             <select
                               value={user.role}
                               onChange={(e) => handleRoleChange(user.id, e.target.value)}
@@ -274,9 +292,22 @@ const AdminUsersPage = () => {
                               ))}
                             </select>
                           ) : (
-                            <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${ROLES[user.role]?.color || ROLES.user.color}`}>
-                              {ROLES[user.role]?.label || 'User'}
-                            </span>
+                            <div className="flex items-center">
+                              <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${ROLES[user.role]?.color || ROLES.user.color}`}>
+                                {ROLES[user.role]?.label || 'User'}
+                              </span>
+                              {user.id === currentUser.uid ? (
+                                <span className="ml-2 text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                                  <Lock size={12} className="mr-1" />
+                                  Own role
+                                </span>
+                              ) : (
+                                <span className="ml-2 text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                                  <Lock size={12} className="mr-1" />
+                                  No permission
+                                </span>
+                              )}
+                            </div>
                           )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
