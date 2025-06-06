@@ -112,11 +112,11 @@ const AdminUsersPage = () => {
     // 2. Current user is admin and target is not developer
     // 3. Target user is not a senior role
     if (targetRole?.isSenior) {
-      if (userRole === 'developer') {
-        // Developer can manage all roles
+      if (userRole === 'admin') {
+        // admin can manage all roles
         return true;
-      } else if (userRole === 'admin' && targetUser.role !== 'developer') {
-        // Admin can manage moderator and user roles, but not developer
+      } else if (userRole === 'developer' && targetUser.role !== 'admin') {
+        // developer can manage moderator and user roles, but not developer
         return true;
       } else {
         // Moderator or lower cannot manage senior roles
