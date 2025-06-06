@@ -252,7 +252,7 @@ const Header = () => {
                   <LogOut size={20} className="text-gray-700 dark:text-gray-300" />
                 </Link>
               ) : (
-                <div className="flex gap-4">
+                <div className="inline-flex gap-4">
                   <Link
                     to="/login"
                     className="flex items-center justify-center px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200"
