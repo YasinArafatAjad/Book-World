@@ -279,46 +279,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
-      {/* Newsletter Section */}
-      <section className="py-16 bg-primary-700 dark:bg-primary-900">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-3xl font-heading font-bold text-white mb-4"
-            >
-              Stay Updated with Book World
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-primary-100 mb-8"
-            >
-              Subscribe to our newsletter for new releases, reading recommendations, and exclusive offers.
-            </motion.p>
-            <motion.form
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex flex-col sm:flex-row gap-2"
-            >
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="flex-grow px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-400"
-                required
-              />
-              <Button type="submit" variant="accent" size="lg">
-                Subscribe
-              </Button>
-            </motion.form>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

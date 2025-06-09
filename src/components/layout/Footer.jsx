@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Book, Facebook, Twitter, Instagram, Mail } from 'lucide-react';
+import { toast } from 'react-toastify';
 import { getSiteSettings } from '../../utils/firebase';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [logoUrl, setLogoUrl] = useState('');
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -21,10 +24,11 @@ const Footer = () => {
     fetchSettings();
   }, []);
 
+
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="felx flex-wrap justify-between">
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-1">
             <Link to="/" className="flex items-center space-x-2 mb-4">
@@ -103,30 +107,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Newsletter */}
-          <div className="col-span-1">
-            <h3 className="text-white font-semibold text-lg mb-4">Subscribe to our Newsletter</h3>
-            <p className="text-sm mb-4">
-              Stay updated with new releases, exclusive offers, and literary events.
-            </p>
-            <form className="mt-4">
-              <div className="flex flex-col space-y-2">
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  className="px-4 py-2 rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 text-white text-sm"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-primary-600 hover:bg-primary-700 transition-colors duration-200 rounded-md text-white text-sm font-medium flex items-center justify-center"
-                >
-                  <Mail size={16} className="mr-2" />
-                  Subscribe
-                </button>
-              </div>
-            </form>
-          </div>
+          
         </div>
 
         <div className="border-t border-gray-800 mt-12 pt-6 text-center text-sm">
