@@ -157,10 +157,10 @@ const Header = () => {
     >
 
       <div className="container mx-auto px-4 pt-4 pb-2">
-        <div className="flex items-center justify-between gap-20 ">
+        <div className="flex items-center justify-between">
           {/* logo */}
           <div className="logo">
-            <Link to="/" className="flex items-center space-x-2 mb-4">
+            <Link to="/" className="flex items-center space-x-2">
               {logoUrl ? (
                 <>
                   <img src={logoUrl} alt="Book World" className="h-20 w-20 object-contain" />
@@ -181,7 +181,7 @@ const Header = () => {
           {/* Desktop  */}
           {/* Header Item  */}
           <div className="headerItem">
-            <nav className="hidden md:flex items-center justify-end flex-wrap gap-4">
+            <nav className="hidden md:flex items-center justify-end flex-wrap gap-[0.75rem]">
               {/* Nav Links */}
               {[...navLinks, ...userLinks].map((link) => (
                 <NavLink
@@ -252,7 +252,7 @@ const Header = () => {
                   <LogOut size={20} className="text-gray-700 dark:text-gray-300" />
                 </Link>
               ) : (
-                <div className="flex gap-4">
+                <div className="flex gap-[0.5rem]">
                   <Link
                     to="/login"
                     className="flex items-center justify-center px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200"

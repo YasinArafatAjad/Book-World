@@ -20,24 +20,28 @@ import LoadingSpinner from '../../components/ui/LoadingSpinner';
 const ROLES = {
   admin: {
     label: 'Admin',
-    color: 'bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200'
+    color: 'bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200',
+    canAssign: ['developer', 'moderator', 'user'] // Admin can assign moderator and user roles
   },
   moderator: {
     label: 'Moderator',
-    color: 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200'
+    color: 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200',
+    canAssign: ['moderator', 'user'] // Moderator can only assign user role
   },
   developer: {
     label: 'Developer',
-    color: 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200'
+    color: 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200',
+    canAssign: ['developer', 'moderator', 'user'] // Developer can assign all roles
   },
   user: {
     label: 'User',
-    color: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
+    color: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
+    canAssign: [] // User cannot assign any roles
   }
 };
 
 const AdminUsersPage = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, userRole } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -67,6 +71,26 @@ const AdminUsersPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Function to get available roles based on current user's role
+  const getAvailableRoles = () => {
+    const roleObj = ROLES[userRole];
+    if (!roleObj) return ['user'];
+    return roleObj.canAssign;
+  };
+
+  // Function to check if current user can change a specific user's role
+  const canChangeUserRole = (targetUser) => {
+    // Users cannot change their own role
+    if (targetUser.id === currentUser.uid) return false;
+    
+    // Get available roles for current user
+    const availableRoles = getAvailableRoles();
+    
+    // Check if the target user's current role is something the current user can manage
+    // or if there are roles the current user can assign
+    return availableRoles.length > 0;
   };
 
   const handleRoleChange = async (userId, newRole) => {
@@ -199,18 +223,12 @@ const AdminUsersPage = () => {
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Role
                     </th>
-                    {/* <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Status
-                    </th> */}
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Joined Date
                     </th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Last Active
                     </th>
-                    {/* <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Actions
-                    </th> */}
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -235,28 +253,32 @@ const AdminUsersPage = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <select
-                            value={user.role}
-                            onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                            disabled={user.id === currentUser.uid || actionLoading}
-                            className={`rounded-full text-sm font-medium px-3 py-1 ${ROLES[user.role]?.color || ROLES.user.color}`}
-                          >
-                            {Object.entries(ROLES).map(([role, { label }]) => (
-                              <option key={role} value={role}>
-                                {label}
+                          {canChangeUserRole(user) ? (
+                            <select
+                              value={user.role}
+                              onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                              disabled={actionLoading}
+                              className={`rounded-full text-sm font-medium px-3 py-1 border-0 focus:ring-2 focus:ring-primary-500 ${ROLES[user.role]?.color || ROLES.user.color}`}
+                            >
+                              {/* Show current role */}
+                              <option value={user.role}>
+                                {ROLES[user.role]?.label || 'User'}
                               </option>
-                            ))}
-                          </select>
+                              {/* Show only roles that current user can assign */}
+                              {getAvailableRoles().map(role => (
+                                user.role !== role && (
+                                  <option key={role} value={role}>
+                                    {ROLES[role].label}
+                                  </option>
+                                )
+                              ))}
+                            </select>
+                          ) : (
+                            <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${ROLES[user.role]?.color || ROLES.user.color}`}>
+                              {ROLES[user.role]?.label || 'User'}
+                            </span>
+                          )}
                         </td>
-                        {/* <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                            user.status === 'active'
-                              ? 'bg-success-100 text-success-800 dark:bg-success-900 dark:text-success-200'
-                              : 'bg-error-100 text-error-800 dark:bg-error-900 dark:text-error-200'
-                          }`}>
-                            {user.status === 'active' ? 'Active' : 'Blocked'}
-                          </span>
-                        </td> */}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900 dark:text-white">
                             {new Date(user.createdAt?.toDate()).toLocaleDateString()}
@@ -267,38 +289,11 @@ const AdminUsersPage = () => {
                             {new Date(user.updatedAt?.toDate()).toLocaleDateString()}
                           </div>
                         </td>
-                      {/*  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          {user.id !== currentUser.uid && (
-                            <div className="flex justify-end space-x-2">
-                              <button
-                                onClick={() => handleToggleStatus(user.id, user.status)}
-                                className={`p-1 rounded-full ${
-                                  user.status === 'active'
-                                    ? 'text-warning-600 hover:text-warning-700 dark:text-warning-400'
-                                    : 'text-success-600 hover:text-success-700 dark:text-success-400'
-                                }`}
-                                disabled={actionLoading}
-                              >
-                                <Ban size={18} />
-                              </button>
-                              <button
-                                onClick={() => {
-                                  setSelectedUser(user);
-                                  setShowDeleteConfirm(true);
-                                }}
-                                className="p-1 rounded-full text-error-600 hover:text-error-700 dark:text-error-400"
-                                disabled={actionLoading}
-                              >
-                                <Trash2 size={18} />
-                              </button>
-                            </div>
-                          )}
-                        </td>  */}
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="6" className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                      <td colSpan="4" className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
                         {searchTerm ? 'No users match your search criteria' : 'No users found'}
                       </td>
                     </tr>

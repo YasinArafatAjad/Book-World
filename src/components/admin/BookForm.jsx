@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { Upload, X, Book } from 'lucide-react';
 import Button from '../ui/Button';
 import { uploadImage } from '../../utils/cloudinary';
+import { useNotification } from '../ui/Notification';
 
 const categories = [
   'Fiction',
@@ -45,7 +46,7 @@ const BookForm = ({ initialData = {}, onSubmit, isEditing = false }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  
+    const { showNotification } = useNotification();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -86,7 +87,7 @@ const BookForm = ({ initialData = {}, onSubmit, isEditing = false }) => {
     // Validate file type
     const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
     if (!validTypes.includes(file.type)) {
-      toast.error('Please select a valid image file (JPEG, JPG, PNG, GIF)');
+      showNotification('Please select a valid image file (JPEG, JPG, PNG, GIF', 'error');
       return;
     }
 
