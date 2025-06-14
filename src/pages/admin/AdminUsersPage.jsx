@@ -22,29 +22,25 @@ const ROLES = {
   admin: {
     label: 'Admin',
     color: 'bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200',
-    canAssign: ['developer', 'moderator', 'user'], // Admin can assign moderator and user roles
-    canAssign: ['admin','developer', 'moderator', 'user'], // Admin can assign moderator and user roles
+    canAssign: ['admin','developer', 'moderator', 'user'],
     isSenior: true
   },
   moderator: {
     label: 'Moderator',
     color: 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200',
-    canAssign: ['moderator', 'user'], // Moderator can only assign user role
-    canAssign: ['moderator', 'user'], 
+    canAssign: ['moderator', 'user'],
     isSenior: true
   },
   developer: {
     label: 'Developer',
     color: 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200',
-    canAssign: ['developer', 'moderator', 'user'], // Developer can assign all roles
-    canAssign: ['developer', 'moderator', 'user'], 
+    canAssign: ['developer', 'moderator', 'user'],
     isSenior: true
   },
   user: {
     label: 'User',
     color: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
-    canAssign: [], // User cannot assign any roles
-    canAssign: [], // User cannot assign any roles
+    canAssign: [],
     isSenior: false
   }
 };
@@ -316,7 +312,6 @@ const AdminUsersPage = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          {canChangeUserRole(user) ? (
                           {hasRolePermission(user) ? (
                             <select
                               value={user.role}
@@ -338,9 +333,6 @@ const AdminUsersPage = () => {
                               ))}
                             </select>
                           ) : (
-                            <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${ROLES[user.role]?.color || ROLES.user.color}`}>
-                              {ROLES[user.role]?.label || 'User'}
-                            </span>
                             <div className="flex items-center">
                               <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${ROLES[user.role]?.color || ROLES.user.color}`}>
                                 {ROLES[user.role]?.label || 'User'}
