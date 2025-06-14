@@ -269,6 +269,7 @@ const Header = () => {
                     Create Account
                   </Link>
                 </div>
+                </div>
               )}
             </nav>
             <div className="flex items-center space-x-4 md:hidden">
