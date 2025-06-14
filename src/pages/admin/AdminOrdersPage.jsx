@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
-import { Search, Package, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Search, Package, ChevronLeft, ChevronRight, X, Truck, Send, Eye } from 'lucide-react';
 import { getAllOrders, updateOrderStatus } from '../../utils/firebase';
+import { createSteadfastOrder, getSteadfastStatus } from '../../utils/steadfast';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import Button from '../../components/ui/Button';
 
@@ -12,6 +13,8 @@ const AdminOrdersPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [courierLoading, setCourierLoading] = useState({});
+  const [courierData, setCourierData] = useState({});
   const ordersPerPage = 10;
 
   useEffect(() => {
@@ -48,6 +51,55 @@ const AdminOrdersPage = () => {
     }
   };
 
+  const handleSteadfastSubmit = async (order) => {
+    try {
+      setCourierLoading(prev => ({ ...prev, [order.id]: true }));
+      
+      const result = await createSteadfastOrder(order);
+      
+      if (result.success) {
+        setCourierData(prev => ({
+          ...prev,
+          [order.id]: {
+            consignment_id: result.consignment_id,
+            tracking_code: result.tracking_code,
+            submitted_at: new Date().toISOString()
+          }
+        }));
+        
+        toast.success('Order successfully submitted to Steadfast Courier!');
+        
+        // Optionally update order status to 'processing' or 'shipped'
+        await handleStatusChange(order.id, 'processing');
+      }
+    } catch (error) {
+      console.error('Error submitting to Steadfast:', error);
+      toast.error('Failed to submit order to courier service');
+    } finally {
+      setCourierLoading(prev => ({ ...prev, [order.id]: false }));
+    }
+  };
+
+  const handleTrackingCheck = async (orderId) => {
+    try {
+      const courierInfo = courierData[orderId];
+      if (!courierInfo) return;
+      
+      setCourierLoading(prev => ({ ...prev, [`track_${orderId}`]: true }));
+      
+      const status = await getSteadfastStatus(courierInfo.consignment_id);
+      
+      if (status.success) {
+        toast.success(`Courier Status: ${status.status.replace('_', ' ').toUpperCase()}`);
+      }
+    } catch (error) {
+      console.error('Error checking tracking:', error);
+      toast.error('Failed to check courier status');
+    } finally {
+      setCourierLoading(prev => ({ ...prev, [`track_${orderId}`]: false }));
+    }
+  };
+
   // Filter orders based on search term
   const filteredOrders = orders.filter(order =>
     order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -77,6 +129,10 @@ const AdminOrdersPage = () => {
         <h1 className="text-3xl font-bold font-heading text-gray-900 dark:text-white">
           Manage Orders
         </h1>
+        <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+          <Truck size={16} />
+          <span>Steadfast Courier Integration</span>
+        </div>
       </div>
 
       {/* Search Bar */}
@@ -118,6 +174,9 @@ const AdminOrdersPage = () => {
                   Status
                 </th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Courier
+                </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -147,12 +206,12 @@ const AdminOrdersPage = () => {
                         {order.shippingAddress?.name}
                       </div>
                       <div className="text-sm text-gray-500 dark:text-gray-400">
-                        {order.shippingAddress?.email}
+                        {order.shippingAddress?.phone}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900 dark:text-white">
-                        ${order.total?.toFixed(2)}
+                        ৳{order.total?.toFixed(2)}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -173,11 +232,55 @@ const AdminOrdersPage = () => {
                         <option value="cancelled">Cancelled</option>
                       </select>
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex flex-col space-y-1">
+                        {courierData[order.id] ? (
+                          <div className="text-xs">
+                            <div className="text-success-600 dark:text-success-400 font-medium">
+                              ✓ Submitted
+                            </div>
+                            <div className="text-gray-500 dark:text-gray-400">
+                              {courierData[order.id].tracking_code}
+                            </div>
+                            <button
+                              onClick={() => handleTrackingCheck(order.id)}
+                              disabled={courierLoading[`track_${order.id}`]}
+                              className="text-primary-600 hover:text-primary-700 dark:text-primary-400 text-xs underline"
+                            >
+                              {courierLoading[`track_${order.id}`] ? 'Checking...' : 'Check Status'}
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => handleSteadfastSubmit(order)}
+                            disabled={courierLoading[order.id] || order.status === 'cancelled'}
+                            className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded ${
+                              order.status === 'cancelled' 
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                : 'bg-primary-100 text-primary-800 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-200'
+                            }`}
+                          >
+                            {courierLoading[order.id] ? (
+                              <>
+                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-primary-600 mr-1"></div>
+                                Submitting...
+                              </>
+                            ) : (
+                              <>
+                                <Send size={12} className="mr-1" />
+                                Send to Courier
+                              </>
+                            )}
+                          </button>
+                        )}
+                      </div>
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       <button
                         onClick={() => setSelectedOrder(order)}
-                        className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
+                        className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 flex items-center"
                       >
+                        <Eye size={16} className="mr-1" />
                         View Details
                       </button>
                     </td>
@@ -185,7 +288,7 @@ const AdminOrdersPage = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                  <td colSpan="7" className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
                     {searchTerm ? 'No orders match your search criteria' : 'No orders found'}
                   </td>
                 </tr>
@@ -323,6 +426,31 @@ const AdminOrdersPage = () => {
                         </p>
                       </div>
                     </div>
+
+                    {/* Courier Information */}
+                    {courierData[selectedOrder.id] && (
+                      <div className="mb-6">
+                        <h4 className="text-base font-medium text-gray-900 dark:text-white mb-2">
+                          Courier Information
+                        </h4>
+                        <div className="bg-primary-50 dark:bg-primary-900/30 rounded-lg p-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">Consignment ID</p>
+                              <p className="font-medium text-gray-900 dark:text-white">
+                                {courierData[selectedOrder.id].consignment_id}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">Tracking Code</p>
+                              <p className="font-medium text-gray-900 dark:text-white">
+                                {courierData[selectedOrder.id].tracking_code}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Customer Information */}
                     <div className="mb-6">
