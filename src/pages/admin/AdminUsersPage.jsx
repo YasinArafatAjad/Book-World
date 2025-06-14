@@ -151,7 +151,6 @@ const AdminUsersPage = () => {
     return 'No permission';
   };
 
->>>>>>> bcb5147f7d1ce44b4ec1d71723c004fc8e7f4dd7
   const handleRoleChange = async (userId, newRole) => {
     try {
       setActionLoading(true);
