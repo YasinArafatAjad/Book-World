@@ -29,21 +29,21 @@ const ROLES = {
   moderator: {
     label: 'Moderator',
     color: 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200',
-    canAssign: ['moderator', 'user'] // Moderator can only assign user role
+    canAssign: ['moderator', 'user'], // Moderator can only assign user role
     canAssign: ['moderator', 'user'], 
     isSenior: true
   },
   developer: {
     label: 'Developer',
     color: 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200',
-    canAssign: ['developer', 'moderator', 'user'] // Developer can assign all roles
+    canAssign: ['developer', 'moderator', 'user'], // Developer can assign all roles
     canAssign: ['developer', 'moderator', 'user'], 
     isSenior: true
   },
   user: {
     label: 'User',
     color: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
-    canAssign: [] // User cannot assign any roles
+    canAssign: [], // User cannot assign any roles
     canAssign: [], // User cannot assign any roles
     isSenior: false
   }
