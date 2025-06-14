@@ -22,7 +22,7 @@ const ROLES = {
   admin: {
     label: 'Admin',
     color: 'bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200',
-    canAssign: ['developer', 'moderator', 'user'] // Admin can assign moderator and user roles
+    canAssign: ['developer', 'moderator', 'user'], // Admin can assign moderator and user roles
     canAssign: ['admin','developer', 'moderator', 'user'], // Admin can assign moderator and user roles
     isSenior: true
   },
