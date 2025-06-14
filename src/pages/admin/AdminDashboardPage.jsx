@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Book, ShoppingBag, Users, TrendingUp, Package, AlertCircle, UserPlus } from 'lucide-react';
+import { Book, ShoppingBag, Users, TrendingUp, Package, AlertCircle, UserPlus, Truck } from 'lucide-react';
 import { collection, getDocs, doc, updateDoc, where, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import Button from '../../components/ui/Button';
@@ -196,6 +196,13 @@ const AdminDashboardPage = () => {
                   icon={<Users size={20} />}
                 >
                   Manage Users
+                </Button>
+                <Button
+                  to="/admin/courier"
+                  variant="secondary"
+                  icon={<Truck size={20} />}
+                >
+                  Courier Management
                 </Button>
             </div>
 

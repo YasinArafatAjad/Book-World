@@ -33,6 +33,7 @@ import AdminAddBookPage from './pages/admin/AdminAddBookPage';
 import AdminEditBookPage from './pages/admin/AdminEditBookPage';
 import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 import AdminUsersPage from './pages/admin/AdminUsersPage';
+import CourierDetailsPage from './pages/admin/CourierDetailsPage';
 
 function App() {
   const location = useLocation();
@@ -75,6 +76,7 @@ function App() {
               <Route path="admin/books/edit/:id" element={<AdminEditBookPage />} />
               <Route path="admin/orders" element={<AdminOrdersPage />} />
               <Route path="admin/users" element={<AdminUsersPage />} />
+              <Route path="admin/courier" element={<CourierDetailsPage />} />
             </Route>
             
             {/* 404 Route */}
