@@ -23,25 +23,20 @@ const ROLES = {
     label: 'Admin',
     color: 'bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200',
     canAssign: ['developer', 'moderator', 'user'] // Admin can assign moderator and user roles
-=======
     canAssign: ['admin','developer', 'moderator', 'user'], // Admin can assign moderator and user roles
     isSenior: true
->>>>>>> bcb5147f7d1ce44b4ec1d71723c004fc8e7f4dd7
   },
   moderator: {
     label: 'Moderator',
     color: 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200',
     canAssign: ['moderator', 'user'] // Moderator can only assign user role
-=======
     canAssign: ['moderator', 'user'], 
     isSenior: true
->>>>>>> bcb5147f7d1ce44b4ec1d71723c004fc8e7f4dd7
   },
   developer: {
     label: 'Developer',
     color: 'bg-accent-100 text-accent-800 dark:bg-accent-900 dark:text-accent-200',
     canAssign: ['developer', 'moderator', 'user'] // Developer can assign all roles
-=======
     canAssign: ['developer', 'moderator', 'user'], 
     isSenior: true
   },
@@ -49,7 +44,6 @@ const ROLES = {
     label: 'User',
     color: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
     canAssign: [] // User cannot assign any roles
-=======
     canAssign: [], // User cannot assign any roles
     isSenior: false
   }
@@ -108,8 +102,6 @@ const AdminUsersPage = () => {
     return availableRoles.length > 0;
   };
 
-<<<<<<< HEAD
-=======
   // Function to check if current user has permission to manage a specific user's role
   const hasRolePermission = (targetUser) => {
     // Users cannot change their own role
@@ -325,11 +317,8 @@ const AdminUsersPage = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-<<<<<<< HEAD
                           {canChangeUserRole(user) ? (
-=======
                           {hasRolePermission(user) ? (
->>>>>>> bcb5147f7d1ce44b4ec1d71723c004fc8e7f4dd7
                             <select
                               value={user.role}
                               onChange={(e) => handleRoleChange(user.id, e.target.value)}
@@ -350,11 +339,9 @@ const AdminUsersPage = () => {
                               ))}
                             </select>
                           ) : (
-<<<<<<< HEAD
                             <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${ROLES[user.role]?.color || ROLES.user.color}`}>
                               {ROLES[user.role]?.label || 'User'}
                             </span>
-=======
                             <div className="flex items-center">
                               <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${ROLES[user.role]?.color || ROLES.user.color}`}>
                                 {ROLES[user.role]?.label || 'User'}
@@ -364,7 +351,6 @@ const AdminUsersPage = () => {
                                 {getRoleChangeReason(user)}
                               </span>
                             </div>
->>>>>>> bcb5147f7d1ce44b4ec1d71723c004fc8e7f4dd7
                           )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
